@@ -4,8 +4,8 @@ PARAMETROS = {
     "Si":{
         "name": "Silicio",
         "gap_o": 1.17,
-        "nc_t": 6.1968e15, # NC/(T^(3/2))
-        "nv_t": 3.5218e15, # NV/(T^(3/2)) 
+        "nc": 3.22e19, 
+        "nv": 1.82e19, 
         "alpha": 4.73e-4,
         "betha": 636,
         "movility_n": 1350,
@@ -14,8 +14,8 @@ PARAMETROS = {
     "Ge":{
         "name": "Germanio",
         "gap_o": 0.742,
-        "nc_t": 1.9822e15, # NC/(T^(3/2))
-        "nv_t": 1.0296e15, # NV/(T^(3/2)) 
+        "nc": 1.03e19,
+        "nv": 5.35e18,
         "alpha": 4.8e-4,
         "betha": 235,
         "movility_n": 3900,
@@ -24,8 +24,8 @@ PARAMETROS = {
     "AsGa":{
         "name": "Arseniuro de Galio",
         "gap_o": 1.519,
-        "nc_t": 8.1021e13, # NC/(T^(3/2))
-        "nv_t": 1.8321e15, # NV/(T^(3/2))   
+        "nc": 4.21e17,
+        "nv": 9.52e18,   
         "alpha": 5.405e-4,
         "betha": 204,
         "movility_n": 8800,

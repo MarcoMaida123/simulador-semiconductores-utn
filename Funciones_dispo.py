@@ -51,8 +51,8 @@ class Semiconductor():
         self.Egap = self.props["gap_o"] - (self.props["alpha"]*self.T**2)/(self.T + self.props["betha"])
 
     def calcNcNv(self):
-        self.Nc = self.props["nc_t"]*self.T**(3/2)
-        self.Nv = self.props["nv_t"]*self.T**(3/2)
+        self.Nc = self.props["nc"]*(self.T/300)**(3/2)
+        self.Nv = self.props["nv"]*(self.T/300)**(3/2)
 
     def calcNi(self):
         self.ni = np.sqrt(self.Nc * self.Nv) * np.exp(- self.Egap / (2*K_B*self.T))

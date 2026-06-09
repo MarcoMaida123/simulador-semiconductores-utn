@@ -4,7 +4,7 @@ import Funciones_dispo as dispo
 from constantes import Materiales, PARAMETROS
 import graficar as vis
 
-st.set_page_config(page_title="Simulador de Semiconductores", layout="wide")
+st.set_page_config(page_title="Laboratorio Virtual de Semiconductores", layout="wide")
 
 if "mis_parametros" not in st.session_state:
     st.session_state.mis_parametros = PARAMETROS.copy()
@@ -34,17 +34,17 @@ with tab_config:
 
         # --- FILA 2: Nc/T^1.5 ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$N_c / T^{1.5}$")
-        with c_si: nc_t_si = st.number_input("nc_t_si", value=float(st.session_state.mis_parametros["Si"]["nc_t"]), format="%.4e", label_visibility="collapsed")
-        with c_ge: nc_t_ge = st.number_input("nc_t_ge", value=float(st.session_state.mis_parametros["Ge"]["nc_t"]), format="%.4e", label_visibility="collapsed")
-        with c_asga: nc_t_asga = st.number_input("nc_t_asga", value=float(st.session_state.mis_parametros["AsGa"]["nc_t"]), format="%.4e", label_visibility="collapsed")
+        with c_prop: st.markdown("$N_c$")
+        with c_si: nc_si = st.number_input("nc_si", value=float(st.session_state.mis_parametros["Si"]["nc"]), format="%.4e", label_visibility="collapsed")
+        with c_ge: nc_ge = st.number_input("nc_ge", value=float(st.session_state.mis_parametros["Ge"]["nc"]), format="%.4e", label_visibility="collapsed")
+        with c_asga: nc_asga = st.number_input("nc_asga", value=float(st.session_state.mis_parametros["AsGa"]["nc"]), format="%.4e", label_visibility="collapsed")
         
         # --- FILA 3: Nv/T^1.5 ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$N_v / T^{1.5}$")
-        with c_si: nv_t_si = st.number_input("nv_t_si", value=float(st.session_state.mis_parametros["Si"]["nv_t"]), format="%.4e", label_visibility="collapsed")
-        with c_ge: nv_t_ge = st.number_input("nv_t_ge", value=float(st.session_state.mis_parametros["Ge"]["nv_t"]), format="%.4e", label_visibility="collapsed")
-        with c_asga: nv_t_asga = st.number_input("nv_t_asga", value=float(st.session_state.mis_parametros["AsGa"]["nv_t"]), format="%.4e", label_visibility="collapsed")
+        with c_prop: st.markdown("$N_v$")
+        with c_si: nv_si = st.number_input("nv_si", value=float(st.session_state.mis_parametros["Si"]["nv"]), format="%.4e", label_visibility="collapsed")
+        with c_ge: nv_ge = st.number_input("nv_ge", value=float(st.session_state.mis_parametros["Ge"]["nv"]), format="%.4e", label_visibility="collapsed")
+        with c_asga: nv_asga = st.number_input("nv_asga", value=float(st.session_state.mis_parametros["AsGa"]["nv"]), format="%.4e", label_visibility="collapsed")
 
         # --- FILA 4: Alpha ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
@@ -82,9 +82,9 @@ with tab_config:
 
             
             st.session_state.mis_parametros = {
-                "Si": {"name": "Silicio", "gap_o": gap_o_si, "nc_t": nc_t_si, "nv_t": nv_t_si, "alpha": alpha_si, "betha": betha_si, "movility_n": mn_si, "movility_p": mp_si},
-                "Ge": {"name": "Germanio", "gap_o": gap_o_ge, "nc_t": nc_t_ge, "nv_t": nv_t_ge, "alpha": alpha_ge, "betha": betha_ge, "movility_n": mn_ge, "movility_p": mp_ge},
-                "AsGa": {"name": "Arseniuro de Galio", "gap_o": gap_o_asga, "nc_t": nc_t_asga, "nv_t": nv_t_asga, "alpha": alpha_asga, "betha": betha_asga, "movility_n": mn_asga, "movility_p": mp_asga}
+                "Si": {"name": "Silicio", "gap_o": gap_o_si, "nc": nc_si, "nv": nv_si, "alpha": alpha_si, "betha": betha_si, "movility_n": mn_si, "movility_p": mp_si},
+                "Ge": {"name": "Germanio", "gap_o": gap_o_ge, "nc": nc_ge, "nv": nv_ge, "alpha": alpha_ge, "betha": betha_ge, "movility_n": mn_ge, "movility_p": mp_ge},
+                "AsGa": {"name": "Arseniuro de Galio", "gap_o": gap_o_asga, "nc": nc_asga, "nv": nv_asga, "alpha": alpha_asga, "betha": betha_asga, "movility_n": mn_asga, "movility_p": mp_asga}
             }
             st.success("¡Constantes actualizadas con éxito! Volvé a la pestaña del Simulador.")
 
