@@ -91,7 +91,7 @@ with tab_config:
 # ----------------- SIMULADOR PRINCIPAL -----------------
 
 with tab_simulador:
-    st.title("⚡ Simulador de Dispositivos Electrónicos")
+    st.title("Laboratorio Virtual de Semiconductores")
     st.write("Modificá los parámetros en el panel izquierdo para actualizar el simulador en tiempo real.")
 
     # SIDEBAR DE PARAMETROS
