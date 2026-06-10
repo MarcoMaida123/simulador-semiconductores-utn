@@ -52,7 +52,7 @@ class Semiconductor():
         factor_300 = (300**2) / (300 + self.props["beta"])
         factor_t = (self.T**2) / (self.T + self.props["beta"])
         
-        return self.props["gap"] + self.props["alpha"] * (factor_300 - factor_t)
+        self.Egap = self.props["gap"] + self.props["alpha"] * (factor_300 - factor_t)
 
     def calcNcNv(self):
         self.Nc = self.props["nc"]*(self.T/300)**(3/2)

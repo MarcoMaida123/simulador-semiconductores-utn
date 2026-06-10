@@ -27,10 +27,10 @@ with tab_config:
 
         # --- FILA 1: Bandgap Inicial ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("Bandgap Inicial ($E_{g0}$) [eV]")
-        with c_si: gap_o_si = st.number_input("gap_o_si", value=st.session_state.mis_parametros["Si"]["gap_o"], format="%.3f", label_visibility="collapsed")
-        with c_ge: gap_o_ge = st.number_input("gap_o_ge", value=st.session_state.mis_parametros["Ge"]["gap_o"], format="%.3f", label_visibility="collapsed")
-        with c_asga: gap_o_asga = st.number_input("gap_o_asga", value=st.session_state.mis_parametros["AsGa"]["gap_o"], format="%.3f", label_visibility="collapsed")
+        with c_prop: st.markdown("Bandgap a 300K ($E_g$) [eV]")
+        with c_si: gap_si = st.number_input("gap_si", value=st.session_state.mis_parametros["Si"]["gap"], format="%.3f", label_visibility="collapsed")
+        with c_ge: gap_ge = st.number_input("gap_ge", value=st.session_state.mis_parametros["Ge"]["gap"], format="%.3f", label_visibility="collapsed")
+        with c_asga: gap_asga = st.number_input("gap_asga", value=st.session_state.mis_parametros["AsGa"]["gap"], format="%.3f", label_visibility="collapsed")
 
         # --- FILA 2: Nc/T^1.5 ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
@@ -56,9 +56,9 @@ with tab_config:
         # --- FILA 5: Beta ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
         with c_prop: st.markdown("Beta ($\Beta$) de Varshni")
-        with c_si: betha_si = st.number_input("betha_si", value=float(st.session_state.mis_parametros["Si"]["betha"]), format="%.1f", label_visibility="collapsed")
-        with c_ge: betha_ge = st.number_input("betha_ge", value=float(st.session_state.mis_parametros["Ge"]["betha"]), format="%.1f", label_visibility="collapsed")
-        with c_asga: betha_asga = st.number_input("betha_asga", value=float(st.session_state.mis_parametros["AsGa"]["betha"]), format="%.1f", label_visibility="collapsed")
+        with c_si: beta_si = st.number_input("beta_si", value=float(st.session_state.mis_parametros["Si"]["beta"]), format="%.1f", label_visibility="collapsed")
+        with c_ge: beta_ge = st.number_input("beta_ge", value=float(st.session_state.mis_parametros["Ge"]["beta"]), format="%.1f", label_visibility="collapsed")
+        with c_asga: beta_asga = st.number_input("beta_asga", value=float(st.session_state.mis_parametros["AsGa"]["beta"]), format="%.1f", label_visibility="collapsed")
 
         # --- FILA 6: Movilidad Electrones ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
@@ -82,9 +82,9 @@ with tab_config:
 
             
             st.session_state.mis_parametros = {
-                "Si": {"name": "Silicio", "gap_o": gap_o_si, "nc": nc_si, "nv": nv_si, "alpha": alpha_si, "betha": betha_si, "movility_n": mn_si, "movility_p": mp_si},
-                "Ge": {"name": "Germanio", "gap_o": gap_o_ge, "nc": nc_ge, "nv": nv_ge, "alpha": alpha_ge, "betha": betha_ge, "movility_n": mn_ge, "movility_p": mp_ge},
-                "AsGa": {"name": "Arseniuro de Galio", "gap_o": gap_o_asga, "nc": nc_asga, "nv": nv_asga, "alpha": alpha_asga, "betha": betha_asga, "movility_n": mn_asga, "movility_p": mp_asga}
+                "Si": {"name": "Silicio", "gap": gap_si, "nc": nc_si, "nv": nv_si, "alpha": alpha_si, "beta": beta_si, "movility_n": mn_si, "movility_p": mp_si},
+                "Ge": {"name": "Germanio", "gap": gap_ge, "nc": nc_ge, "nv": nv_ge, "alpha": alpha_ge, "beta": beta_ge, "movility_n": mn_ge, "movility_p": mp_ge},
+                "AsGa": {"name": "Arseniuro de Galio", "gap": gap_asga, "nc": nc_asga, "nv": nv_asga, "alpha": alpha_asga, "beta": beta_asga, "movility_n": mn_asga, "movility_p": mp_asga}
             }
             st.success("¡Constantes actualizadas con éxito! Volvé a la pestaña del Simulador.")
 
