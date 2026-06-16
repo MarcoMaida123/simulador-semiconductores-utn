@@ -112,5 +112,5 @@ class Semiconductor():
         return [It, In, Ip]
 
     def calcMovilidades(self):
-        self.mu_n = self.props["mu_n"]*(self.T/300)**(self.props["mu_n-exp"])
-        self.mu_p = self.props["mu_p"]*(self.T/300)**(self.props["mu_p-exp"])
+        self.mu_n = self.props["mu_n"]*(self.T/300)**(-self.props["mu_n-exp"])
+        self.mu_p = self.props["mu_p"]*(self.T/300)**(-self.props["mu_p-exp"])

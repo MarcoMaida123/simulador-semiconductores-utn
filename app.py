@@ -9,7 +9,8 @@ st.set_page_config(page_title="Laboratorio Virtual de Semiconductores", layout="
 if "mis_parametros" not in st.session_state:
     st.session_state.mis_parametros = PARAMETROS.copy()
 
-tab_simulador, tab_config, tab_autor = st.tabs(["Simulador", "Tabla de Constantes", "Autor"])
+tab_simulador, tab_config, tab_autor = st.tabs(["Simulador", "Tabla de Constantes", ""
+"Autor"])
 
 # ----------------- TABLA DE CONSTANTES -----------------
 # ----------------- TABLA DE CONSTANTES -----------------
