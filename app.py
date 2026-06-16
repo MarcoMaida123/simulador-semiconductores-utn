@@ -9,12 +9,12 @@ st.set_page_config(page_title="Laboratorio Virtual de Semiconductores", layout="
 if "mis_parametros" not in st.session_state:
     st.session_state.mis_parametros = PARAMETROS.copy()
 
-tab_simulador, tab_config, tab_autor = st.tabs(["📊 Simulador", "⚙️ Tabla de Constantes", "👨‍💻 Autor"])
+tab_simulador, tab_config, tab_autor = st.tabs(["Simulador", "Tabla de Constantes", "Autor"])
 
 # ----------------- TABLA DE CONSTANTES -----------------
 # ----------------- TABLA DE CONSTANTES -----------------
 with tab_config:
-    st.header("📋 Tabla de Constantes del Material")
+    st.header("Tabla de Constantes del Material")
     st.write("Modificá los valores de los campos según los datos de tu cátedra y hacé clic en **Guardar Cambios**.")
 
     with st.form("form_constantes"):
@@ -22,7 +22,7 @@ with tab_config:
         # =========================================================================
         # PARTE 1: PARÁMETROS TÍPICOS / COMUNES (A 300K)
         # =========================================================================
-        st.subheader("1️⃣ Parámetros Típicos / Comunes (a 300K)")
+        st.subheader("Parámetros Típicos / Comunes (a 300K)")
         st.caption("Valores estándar tabulados para condiciones normales de laboratorio.")
         
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1])
@@ -72,7 +72,7 @@ with tab_config:
         # =========================================================================
         # PARTE 2: CONSTANTES ESPECÍFICAS (DEPENDENCIA TÉRMICA)
         # =========================================================================
-        st.subheader("2️⃣ Coeficientes de Dependencia Térmica")
+        st.subheader("Coeficientes de Dependencia Térmica")
         st.caption("Parámetros empíricos avanzados que modelan la variación respecto a la temperatura.")
         
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1])
@@ -129,7 +129,7 @@ with tab_simulador:
 
     # SIDEBAR DE PARAMETROS
     with st.sidebar:
-        st.header("🎛️ Parámetros de Entrada")
+        st.header("Parámetros de Entrada")
         
         # Selección de materiales
         material_elegido = st.selectbox(
@@ -158,7 +158,7 @@ with tab_simulador:
     # Instanciamos el semiconductor a trabajar
     semi = dispo.Semiconductor(material_elegido, T=temperatura, Na=Na, Nd=Nd, V=tension, L=longitud, A=area)
 
-    st.subheader("📊 Resultados Numéricos")
+    st.subheader("Resultados Numéricos")
     
     # Métricas base: GAP, concentraciones y conductividades
     m_col1, m_col2, m_col3 = st.columns(3)
@@ -190,12 +190,12 @@ with tab_simulador:
     col_grafico, col_tablas = st.columns([1.5, 1])
 
     with col_grafico:
-        st.subheader("📈 Diagrama de Niveles de Energía")
+        st.subheader("Diagrama de Niveles de Energía")
         vis.graficarApp(semi)
         st.plotly_chart(vis.figura_actual, use_container_width=True)
 
     with col_tablas:
-        st.subheader("📌 Distancias y Brechas Energéticas")
+        st.subheader("Distancias y Brechas Energéticas")
         
         Ecv, Efv, Eiv, Ev, x = semi.calcBandas()
 
@@ -219,7 +219,7 @@ with tab_simulador:
     st.markdown("---")
     
     # Corrientes de DRIFT calculadas
-    st.subheader("🚗 Corrientes de Drift")
+    st.subheader("Corrientes de Drift")
     
     It, In, Ip = semi.calcCorrientes()
 
@@ -233,7 +233,7 @@ with tab_simulador:
 
 # ----------------- DATOS MIOS -----------------
 with tab_autor:
-    st.header("👨‍💻 Acerca del Desarrollador")
+    st.header("Acerca del Desarrollador")
     st.write("Este simulador fue desarrollado con fines pedagógicos para la comunidad de ingeniería.")
     
     st.markdown(
