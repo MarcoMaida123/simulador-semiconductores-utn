@@ -12,12 +12,19 @@ if "mis_parametros" not in st.session_state:
 tab_simulador, tab_config, tab_autor = st.tabs(["📊 Simulador", "⚙️ Tabla de Constantes", "👨‍💻 Autor"])
 
 # ----------------- TABLA DE CONSTANTES -----------------
+# ----------------- TABLA DE CONSTANTES -----------------
 with tab_config:
     st.header("📋 Tabla de Constantes del Material")
     st.write("Modificá los valores de los campos según los datos de tu cátedra y hacé clic en **Guardar Cambios**.")
 
     with st.form("form_constantes"):
-        # --- ENCABEZADOS DE LA TABLA ---
+        
+        # =========================================================================
+        # PARTE 1: PARÁMETROS TÍPICOS / COMUNES (A 300K)
+        # =========================================================================
+        st.subheader("1️⃣ Parámetros Típicos / Comunes (a 300K)")
+        st.caption("Valores estándar tabulados para condiciones normales de laboratorio.")
+        
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1])
         with c_prop: st.markdown("**Propiedad / Variable**")
         with c_si: st.markdown("**Silicio (Si)**")
@@ -25,69 +32,95 @@ with tab_config:
         with c_asga: st.markdown("**Arseniuro de Galio (GaAs)**")
         st.markdown("---") 
 
-        # --- FILA 1: Bandgap Inicial ---
+        # --- FILA: Bandgap Inicial ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
         with c_prop: st.markdown("Bandgap a 300K ($E_g$) [eV]")
-        with c_si: gap_si = st.number_input("gap_si", value=st.session_state.mis_parametros["Si"]["gap"], format="%.3f", label_visibility="collapsed")
-        with c_ge: gap_ge = st.number_input("gap_ge", value=st.session_state.mis_parametros["Ge"]["gap"], format="%.3f", label_visibility="collapsed")
-        with c_asga: gap_asga = st.number_input("gap_asga", value=st.session_state.mis_parametros["AsGa"]["gap"], format="%.3f", label_visibility="collapsed")
+        with c_si: gap_si = st.number_input("gap_si", value=float(st.session_state.mis_parametros["Si"]["gap"]), format="%.3f", label_visibility="collapsed")
+        with c_ge: gap_ge = st.number_input("gap_ge", value=float(st.session_state.mis_parametros["Ge"]["gap"]), format="%.3f", label_visibility="collapsed")
+        with c_asga: gap_asga = st.number_input("gap_asga", value=float(st.session_state.mis_parametros["AsGa"]["gap"]), format="%.3f", label_visibility="collapsed")
 
-        # --- FILA 2: Nc/T^1.5 ---
+        # --- FILA: Nc ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$N_c$")
+        with c_prop: st.markdown("Efectiva en Conducción ($N_c$) [cm⁻³]")
         with c_si: nc_si = st.number_input("nc_si", value=float(st.session_state.mis_parametros["Si"]["nc"]), format="%.4e", label_visibility="collapsed")
         with c_ge: nc_ge = st.number_input("nc_ge", value=float(st.session_state.mis_parametros["Ge"]["nc"]), format="%.4e", label_visibility="collapsed")
         with c_asga: nc_asga = st.number_input("nc_asga", value=float(st.session_state.mis_parametros["AsGa"]["nc"]), format="%.4e", label_visibility="collapsed")
         
-        # --- FILA 3: Nv/T^1.5 ---
+        # --- FILA: Nv ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$N_v$")
+        with c_prop: st.markdown("Efectiva en Valencia ($N_v$) [cm⁻³]")
         with c_si: nv_si = st.number_input("nv_si", value=float(st.session_state.mis_parametros["Si"]["nv"]), format="%.4e", label_visibility="collapsed")
         with c_ge: nv_ge = st.number_input("nv_ge", value=float(st.session_state.mis_parametros["Ge"]["nv"]), format="%.4e", label_visibility="collapsed")
         with c_asga: nv_asga = st.number_input("nv_asga", value=float(st.session_state.mis_parametros["AsGa"]["nv"]), format="%.4e", label_visibility="collapsed")
 
-        # --- FILA 4: Alpha ---
+        # --- FILA: Movilidad Electrones ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("Alpha ($\Alpha$) de Varshni")
+        with c_prop: st.markdown("Movilidad de electrones ($\mu_n$) [cm²/V·s]")
+        with c_si: mn_si = st.number_input("mn_si", value=float(st.session_state.mis_parametros["Si"]["mu_n"]), format="%.1f", label_visibility="collapsed")
+        with c_ge: mn_ge = st.number_input("mn_ge", value=float(st.session_state.mis_parametros["Ge"]["mu_n"]), format="%.1f", label_visibility="collapsed")
+        with c_asga: mn_asga = st.number_input("mn_asga", value=float(st.session_state.mis_parametros["AsGa"]["mu_n"]), format="%.1f", label_visibility="collapsed")
+
+        # --- FILA: Movilidad Huecos ---
+        c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
+        with c_prop: st.markdown("Movilidad de huecos ($\mu_p$) [cm²/V·s]")
+        with c_si: mp_si = st.number_input("mp_si", value=float(st.session_state.mis_parametros["Si"]["mu_p"]), format="%.1f", label_visibility="collapsed")
+        with c_ge: mp_ge = st.number_input("mp_ge", value=float(st.session_state.mis_parametros["Ge"]["mu_p"]), format="%.1f", label_visibility="collapsed")
+        with c_asga: mp_asga = st.number_input("mp_asga", value=float(st.session_state.mis_parametros["AsGa"]["mu_p"]), format="%.1f", label_visibility="collapsed")
+
+        st.markdown("<br>", unsafe_allow_html=True) # Espaciador visual
+
+        # =========================================================================
+        # PARTE 2: CONSTANTES ESPECÍFICAS (DEPENDENCIA TÉRMICA)
+        # =========================================================================
+        st.subheader("2️⃣ Coeficientes de Dependencia Térmica")
+        st.caption("Parámetros empíricos avanzados que modelan la variación respecto a la temperatura.")
+        
+        c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1])
+        with c_prop: st.markdown("**Propiedad / Variable**")
+        with c_si: st.markdown("**Silicio (Si)**")
+        with c_ge: st.markdown("**Germanio (Ge)**")
+        with c_asga: st.markdown("**Arseniuro de Galio (GaAs)**")
+        st.markdown("---") 
+
+        # --- FILA: Alpha ---
+        c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
+        with c_prop: st.markdown("Alpha ($\alpha$) de Varshni [eV/K]")
         with c_si: alpha_si = st.number_input("alpha_si", value=float(st.session_state.mis_parametros["Si"]["alpha"]), format="%.3e", label_visibility="collapsed")
         with c_ge: alpha_ge = st.number_input("alpha_ge", value=float(st.session_state.mis_parametros["Ge"]["alpha"]), format="%.3e", label_visibility="collapsed")
         with c_asga: alpha_asga = st.number_input("alpha_asga", value=float(st.session_state.mis_parametros["AsGa"]["alpha"]), format="%.3e", label_visibility="collapsed")
 
-        # --- FILA 5: Beta ---
+        # --- FILA: Beta ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("Beta ($\Beta$) de Varshni")
+        with c_prop: st.markdown("Beta ($\beta$) de Varshni [K]")
         with c_si: beta_si = st.number_input("beta_si", value=float(st.session_state.mis_parametros["Si"]["beta"]), format="%.1f", label_visibility="collapsed")
         with c_ge: beta_ge = st.number_input("beta_ge", value=float(st.session_state.mis_parametros["Ge"]["beta"]), format="%.1f", label_visibility="collapsed")
         with c_asga: beta_asga = st.number_input("beta_asga", value=float(st.session_state.mis_parametros["AsGa"]["beta"]), format="%.1f", label_visibility="collapsed")
 
-        # --- FILA 6: Movilidad Electrones ---
+        # --- FILA: Exponente Movilidad n ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$\mu_n$")
-        with c_si: mn_si = st.number_input("mn_si", value=float(st.session_state.mis_parametros["Si"]["movility_n"]), format="%.1f", label_visibility="collapsed")
-        with c_ge: mn_ge = st.number_input("mn_ge", value=float(st.session_state.mis_parametros["Ge"]["movility_n"]), format="%.1f", label_visibility="collapsed")
-        with c_asga: mn_asga = st.number_input("mn_asga", value=float(st.session_state.mis_parametros["AsGa"]["movility_n"]), format="%.1f", label_visibility="collapsed")
+        with c_prop: st.markdown("Exponente Temp. de $\mu_n$")
+        with c_si: exp_n_si = st.number_input("exp_n_si", value=float(st.session_state.mis_parametros["Si"]["mu_n-exp"]), format="%.2f", label_visibility="collapsed")
+        with c_ge: exp_n_ge = st.number_input("exp_n_ge", value=float(st.session_state.mis_parametros["Ge"]["mu_n-exp"]), format="%.2f", label_visibility="collapsed")
+        with c_asga: exp_n_asga = st.number_input("exp_n_asga", value=float(st.session_state.mis_parametros["AsGa"]["mu_n-exp"]), format="%.2f", label_visibility="collapsed")
 
-        # --- FILA 7: Movilidad Huecos ---
+        # --- FILA: Exponente Movilidad p ---
         c_prop, c_si, c_ge, c_asga = st.columns([2.5, 1, 1, 1], vertical_alignment="center")
-        with c_prop: st.markdown("$\mu_p$")
-        with c_si: mp_si = st.number_input("mp_si", value=float(st.session_state.mis_parametros["Si"]["movility_p"]), format="%.1f", label_visibility="collapsed")
-        with c_ge: mp_ge = st.number_input("mp_ge", value=float(st.session_state.mis_parametros["Ge"]["movility_p"]), format="%.1f", label_visibility="collapsed")
-        with c_asga: mp_asga = st.number_input("mp_asga", value=float(st.session_state.mis_parametros["AsGa"]["movility_p"]), format="%.1f", label_visibility="collapsed")
+        with c_prop: st.markdown("Exponente Temp. de $\mu_p$")
+        with c_si: exp_p_si = st.number_input("exp_p_si", value=float(st.session_state.mis_parametros["Si"]["mu_p-exp"]), format="%.2f", label_visibility="collapsed")
+        with c_ge: exp_p_ge = st.number_input("exp_p_ge", value=float(st.session_state.mis_parametros["Ge"]["mu_p-exp"]), format="%.2f", label_visibility="collapsed")
+        with c_asga: exp_p_asga = st.number_input("exp_p_asga", value=float(st.session_state.mis_parametros["AsGa"]["mu_p-exp"]), format="%.2f", label_visibility="collapsed")
 
         st.markdown("---")
         
         boton_guardar = st.form_submit_button("💾 Guardar Cambios")
         
         if boton_guardar:
-
-            
             st.session_state.mis_parametros = {
-                "Si": {"name": "Silicio", "gap": gap_si, "nc": nc_si, "nv": nv_si, "alpha": alpha_si, "beta": beta_si, "movility_n": mn_si, "movility_p": mp_si},
-                "Ge": {"name": "Germanio", "gap": gap_ge, "nc": nc_ge, "nv": nv_ge, "alpha": alpha_ge, "beta": beta_ge, "movility_n": mn_ge, "movility_p": mp_ge},
-                "AsGa": {"name": "Arseniuro de Galio", "gap": gap_asga, "nc": nc_asga, "nv": nv_asga, "alpha": alpha_asga, "beta": beta_asga, "movility_n": mn_asga, "movility_p": mp_asga}
+                "Si": {"name": "Silicio", "gap": gap_si, "nc": nc_si, "nv": nv_si, "alpha": alpha_si, "beta": beta_si, "mu_n": mn_si, "mu_n-exp": exp_n_si, "mu_p": mp_si, "mu_p-exp": exp_p_si},
+                "Ge": {"name": "Germanio", "gap": gap_ge, "nc": nc_ge, "nv": nv_ge, "alpha": alpha_ge, "beta": beta_ge, "mu_n": mn_ge, "mu_n-exp": exp_n_ge, "mu_p": mp_ge, "mu_p-exp": exp_p_ge},
+                "AsGa": {"name": "Arseniuro de Galio", "gap": gap_asga, "nc": nc_asga, "nv": nv_asga, "alpha": alpha_asga, "beta": beta_asga, "mu_n": mn_asga, "mu_n-exp": exp_n_asga, "mu_p": mp_asga, "mu_p-exp": exp_p_asga}
             }
             st.success("¡Constantes actualizadas con éxito! Volvé a la pestaña del Simulador.")
-
 # ----------------- SIMULADOR PRINCIPAL -----------------
 
 with tab_simulador:
@@ -106,7 +139,7 @@ with tab_simulador:
         )
 
         # Temperatura del material
-        temperatura = st.slider("Temperatura [K]:", min_value=100, max_value=600, value=300, step=10)
+        temperatura = st.slider("Temperatura [K]:", min_value=100, max_value=600, value=300, step=5)
 
         # Dopaje del material
         st.subheader("🧪 Dopaje [cm^-3]")

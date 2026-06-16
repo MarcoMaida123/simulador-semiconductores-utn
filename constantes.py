@@ -8,8 +8,10 @@ PARAMETROS = {
         "nv": 1.82e19, 
         "alpha": 4.73e-4,
         "beta": 636,
-        "movility_n": 1350,
-        "movility_p": 480
+        "mu_n": 1350,
+        "mu_n-exp": 2.42,
+        "mu_p": 480,
+        "mu_p-exp": 2.2
     },
     "Ge":{
         "name": "Germanio",
@@ -18,8 +20,10 @@ PARAMETROS = {
         "nv": 5.35e18,
         "alpha": 4.8e-4,
         "beta": 235,
-        "movility_n": 3900,
-        "movility_p": 1900
+        "mu_n": 3900,
+        "mu_n-exp": 1.66,
+        "mu_p": 1900,
+        "mu_p-exp": 2.33
     },
     "AsGa":{
         "name": "Arseniuro de Galio",
@@ -28,8 +32,10 @@ PARAMETROS = {
         "nv": 9.52e18,   
         "alpha": 5.405e-4,
         "beta": 204,
-        "movility_n": 8800,
-        "movility_p": 400
+        "mu_n": 8800,
+        "mu_n-exp": 1,
+        "mu_p": 400,
+        "mu_p-exp": 2.1
     }
 }
 

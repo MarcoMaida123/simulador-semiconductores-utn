@@ -20,8 +20,11 @@ class Semiconductor():
     E: float
     L: float
     A: float
+    mu_n: float
+    mu_p: float
     S_n: float
     S_h: float
+
 
     def __init__(self, material, T=300, Na=0, Nd=0, V=0, L=1, A=1):
         # Cargo parametros de acuerdo al material
@@ -39,6 +42,8 @@ class Semiconductor():
         self.calcNi()
         # Calculo no y pc
         self.no, self.po = self.calcNoPo(Na, Nd)
+        # Calculo movilidades
+        self.calcMovilidades()
         # Calculo S_n y S_h
         self.S_n = self.calcSigma(Sigmas.ELECTRONES)
         self.S_h = self.calcSigma(Sigmas.HUECOS)
@@ -93,11 +98,11 @@ class Semiconductor():
     def calcSigma(self, tipo:Sigmas):
 
         if tipo == Sigmas.ELECTRONES:
-            return Q_E*self.no*self.props["movility_n"]
+            return Q_E*self.no*self.mu_n
         elif tipo == Sigmas.HUECOS:
-            return Q_E*self.po*self.props["movility_p"]
+            return Q_E*self.po*self.mu_p
         else:
-            return Q_E*(self.no*self.props["movility_n"] + self.po*self.props["movility_p"])
+            return Q_E*(self.no*self.mu_n + self.po*self.mu_p)
    
     def calcCorrientes(self):
         It = self.V * self.A * self.calcSigma(Sigmas.TOTAL) / self.L
@@ -105,3 +110,7 @@ class Semiconductor():
         Ip = self.calcSigma(Sigmas.HUECOS)*self.V*self.A/self.L
 
         return [It, In, Ip]
+
+    def calcMovilidades(self):
+        self.mu_n = self.props["mu_n"]*(self.T/300)**(self.props["mu_n-exp"])
+        self.mu_p = self.props["mu_p"]*(self.T/300)**(self.props["mu_p-exp"])
