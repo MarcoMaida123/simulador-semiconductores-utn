@@ -17,7 +17,7 @@ def graficar_diagrama_bandas(semi):
   # Dibujar las líneas de las bandas
   plt.plot(x, Ecv, label=r"Banda de Conducción ($E_c$)", color="#d32f2f", lw=2)
   plt.plot(x, Eiv, label=r"Nivel Intrínseco ($E_i$)", color="#f57c00", linestyle="--", lw=1.5)
-  plt.plot(x, Efv, label=r"Nivel de Fermi ($E_f$)", color="#388e3c", linestyle="-.", lw=2)
+  plt.plot(x, Efv, label=r"Nivel de Ferm i ($E_f$)", color="#388e3c", linestyle="-.", lw=2)
   plt.plot(x, Ev, label=r"Banda de Valencia ($E_v$)", color="#1976d2", lw=2)
 
   # 4. Acotaciones y Flechas Dinámicas

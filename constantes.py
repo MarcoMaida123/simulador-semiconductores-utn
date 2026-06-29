@@ -48,6 +48,11 @@ K_B = 8.6333e-5 # [eV/K]
 V_TH = 0.0259 #[eV]
 Q_E = 1.602176621e-19 #[C]
 
+class Transitorios(Enum):
+    SIN_LUZ = 0
+    ENCENDIDO_LUZ = 1
+    APAGADO_LUZ = 2
+
 class Dopaje(Enum):
     TIPO_N = 1
     TIPO_P = 2
