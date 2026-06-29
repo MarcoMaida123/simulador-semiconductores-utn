@@ -143,7 +143,7 @@ def mostrar_tab_portadores(labo):
     st.subheader("Distribución Espacial de Portadores")
     Nt = len(labo.t)
 
-    # Slider de tiempo
+    # Slider de tiempo (sirve como estado inicial y control manual)
     opciones_tiempo = [(i, f"t = {labo.t[i]*1e6:.3f} µs") for i in range(Nt)]
     val_slider = st.select_slider(
             "Evolución temporal (Portadores):",
@@ -158,24 +158,73 @@ def mostrar_tab_portadores(labo):
     grafico, metricas = st.columns([3, 1])
 
     with metricas:
-        # Fila de métricas tecnológicas clave
+        # Fila de métricas tecnológicas clave (Se mantienen tal cual las tenías)
         st.metric("$n_o$ (Equilibrio)", f"{labo.semi.no_eq:.2e} cm⁻³")
         st.metric("$p_o$ (Equilibrio)", f"{labo.semi.po_eq:.2e} cm⁻³")
         st.metric("$n_i$ (Intrínseco)", f"{labo.semi.ni:.2e} cm⁻³")
 
     with grafico:
-        # Gráfico interactivo logarítmico (n, p vs x)
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.no[:, idx_t], name="Electrones (n)", line=dict(color='#b91c1c', width=3.5)))
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.po[:, idx_t], name="Huecos (p)", line=dict(color='#1d4ed8', width=3.5)))
+        # Gráfico interactivo logarítmico base (Inicializa en el tiempo del slider)
+        fig = go.Figure(
+            data=[
+                go.Scatter(x=labo.x, y=labo.semi.no[:, idx_t], name="Electrones (n)", line=dict(color='#b91c1c', width=3.5)),
+                go.Scatter(x=labo.x, y=labo.semi.po[:, idx_t], name="Huecos (p)", line=dict(color='#1d4ed8', width=3.5))
+            ]
+        )
+
+        paso_frame = max(1, Nt // 80)
+        
+        lista_frames = []
+        for t_idx in range(0, Nt, paso_frame):
+            lista_frames.append(
+                go.Frame(
+                    data=[
+                        go.Scatter(x=labo.x, y=labo.semi.no[:, t_idx]),
+                        go.Scatter(x=labo.x, y=labo.semi.po[:, t_idx])
+                    ],
+                    name=f"f_{t_idx}"
+                )
+            )
+        fig.frames = lista_frames
+
+        # Agregamos los controles de reproducción abajo de la gráfica
+        fig.update_layout(
+            updatemenus=[
+                dict(
+                    type="buttons",
+                    buttons=[
+                        dict(label="Play",
+                            method="animate",
+                            args=[None, dict(frame=dict(duration=40, redraw=False), fromcurrent=True, transition=dict(duration=0))]),
+                        dict(label="Pause",
+                            method="animate",
+                            args=[[None], dict(frame=dict(duration=0, redraw=False), mode="immediate", transition=dict(duration=0))])
+                    ],
+                    direction="right",  # <-- CAMBIADO DE "horizontal" A "right" CORREGIDO
+                    pad={"r": 10, "t": 10},
+                    showactive=False,
+                    x=0.0, y=-0.25, 
+                    xanchor="left", yanchor="top"
+                )
+            ]
+        )
+
+        #CONGELAMOS EL EJE Y: Evita que la escala rebote de forma loca al animar
+        y_min = min(labo.semi.po_eq, labo.semi.no_eq) * 0.1
+        y_max = max(np.max(labo.semi.no), np.max(labo.semi.po)) * 10
+
         fig.update_layout(
             template="plotly_white", xaxis_title="Posición x [cm]", yaxis_title="Concentración [cm⁻³]",
             yaxis_type="log", margin=dict(l=10, r=10, t=10, b=10), height=400, hovermode="x unified"
         )
+        
+        # Mantenemos tu configuración exacta de formato de potencias en el eje Y
         fig.update_yaxes(
-            exponentformat="power",  # Options: "none", "e", "E", "power", "SI", "B"
-            showexponent="all"       # Options: "all", "first", "last", "none"
+            range=[np.log10(y_min), np.log10(y_max)], # Bloqueo de límites verticales
+            exponentformat="power",  
+            showexponent="all"       
         )
+        
         st.plotly_chart(fig, use_container_width=True)
 
 def mostrar_tab_bandas(labo):
@@ -183,18 +232,16 @@ def mostrar_tab_bandas(labo):
     st.subheader("Evolución Espacial del Diagrama de Bandas")
     Nt = len(labo.t)
 
-    if Nt > 1:
-        opciones_tiempo = [(i, f"t = {labo.t[i]*1e6:.3f} µs") for i in range(Nt)]
-        val_slider = st.select_slider(
-            "Evolución temporal (Bandas):",
-            options=[opt[0] for opt in opciones_tiempo],
-            format_func=lambda x: opciones_tiempo[x][1],
-            value=0,
-            key=f"b_time_{Nt}"
-        )
-        idx_t = val_slider if val_slider < Nt else (Nt - 1)
-    else:
-        idx_t = 0
+    opciones_tiempo = [(i, f"t = {labo.t[i]*1e6:.3f} µs") for i in range(Nt)]
+    val_slider = st.select_slider(
+        "Evolución temporal (Bandas):",
+        options=[opt[0] for opt in opciones_tiempo],
+        format_func=lambda x: opciones_tiempo[x][1],
+        value=0,
+        key=f"b_time_{Nt}"
+    )
+    idx_t = val_slider if val_slider < Nt else (Nt - 1)
+
 
     # Estructurar vista de grafico y métricas
     grafico, metricas = st.columns([3, 1])
@@ -207,19 +254,76 @@ def mostrar_tab_bandas(labo):
         st.metric("Tensión de Deformación (Vapp)", f"{labo.V:.2f} V")
 
     with grafico:
-        # Gráfico estructural cuántico (Ec, Ev, Ei, Efn, Efp)
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.Ecv[:, idx_t], name="Banda Conducción (Ec)", line=dict(color='#d32f2f', width=3)))
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.Eiv[:, idx_t], name="Nivel Intrínseco (Ei)", line=dict(color='#d97706', width=1.5, dash='dash')))
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.Efn_i[:, idx_t], name="Cuasi-Fermi e⁻ (Efn)", line=dict(color='#15803d', width=2.5, dash='dashdot')))
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.Efp_i[:, idx_t], name="Cuasi-Fermi h⁺ (Efp)", line=dict(color='purple', width=2.5, dash='dashdot')))
-        fig.add_trace(go.Scatter(x=labo.x, y=labo.semi.Ev[:, idx_t], name="Banda Valencia (Ev)", line=dict(color='#1d4ed8', width=3)))
-        
-        fig.update_layout(
-            template="plotly_white", xaxis_title="Posición x [cm]", yaxis_title="Energía [eV]",
-            margin=dict(l=10, r=10, t=10, b=10), height=420, hovermode="x unified"
+        # Gráfico interactivo logarítmico base (Inicializa en el tiempo del slider)
+        fig = go.Figure(
+            data=[
+                go.Scatter(x=labo.x, y=labo.semi.Ecv[:, idx_t], name="Banda Conducción (Ec)", line=dict(color='#d32f2f', width=3)),
+                go.Scatter(x=labo.x, y=labo.semi.Eiv[:, idx_t], name="Nivel Intrínseco (Ei)", line=dict(color='#d97706', width=1.5, dash='dash')),
+                go.Scatter(x=labo.x, y=labo.semi.Efn_i[:, idx_t], name="Cuasi-Fermi e⁻ (Efn)", line=dict(color='#15803d', width=2.5, dash='dashdot')),
+                go.Scatter(x=labo.x, y=labo.semi.Efp_i[:, idx_t], name="Cuasi-Fermi h⁺ (Efp)", line=dict(color='purple', width=2.5, dash='dashdot')),
+                go.Scatter(x=labo.x, y=labo.semi.Ev[:, idx_t], name="Banda Valencia (Ev)", line=dict(color='#1d4ed8', width=3))
+            ]
         )
+
+        paso_frame = max(1, Nt // 80)
+        
+        lista_frames = []
+        for t_idx in range(0, Nt, paso_frame):
+            lista_frames.append(
+                go.Frame(
+                    data=[
+                        go.Scatter(x=labo.x, y=labo.semi.Ecv[:, t_idx], name="Banda Conducción (Ec)", line=dict(color='#d32f2f', width=3)),
+                        go.Scatter(x=labo.x, y=labo.semi.Eiv[:, t_idx], name="Nivel Intrínseco (Ei)", line=dict(color='#d97706', width=1.5, dash='dash')),
+                        go.Scatter(x=labo.x, y=labo.semi.Efn_i[:, t_idx], name="Cuasi-Fermi e⁻ (Efn)", line=dict(color='#15803d', width=2.5, dash='dashdot')),
+                        go.Scatter(x=labo.x, y=labo.semi.Efp_i[:, t_idx], name="Cuasi-Fermi h⁺ (Efp)", line=dict(color='purple', width=2.5, dash='dashdot')),
+                        go.Scatter(x=labo.x, y=labo.semi.Ev[:, t_idx], name="Banda Valencia (Ev)", line=dict(color='#1d4ed8', width=3))
+                    ],
+                    name=f"f_{t_idx}"
+                )
+            )
+        fig.frames = lista_frames
+
+        # Agregamos los controles de reproducción abajo de la gráfica
+        fig.update_layout(
+            updatemenus=[
+                dict(
+                    type="buttons",
+                    buttons=[
+                        dict(label="Play",
+                            method="animate",
+                            args=[None, dict(frame=dict(duration=40, redraw=False), fromcurrent=True, transition=dict(duration=0))]),
+                        dict(label="Pause",
+                            method="animate",
+                            args=[[None], dict(frame=dict(duration=0, redraw=False), mode="immediate", transition=dict(duration=0))])
+                    ],
+                    direction="right",  # <-- CAMBIADO DE "horizontal" A "right" CORREGIDO
+                    pad={"r": 10, "t": 10},
+                    showactive=False,
+                    x=0.0, y=-0.25, 
+                    xanchor="left", yanchor="top"
+                )
+            ]
+        )
+
+        # Congelamos el Eje Y de las bandas para que no tiemble
+        # La banda de valencia arranca abajo (cerca de -Vapp o 0) y la de conducción arriba (Egap)
+        y_min = np.min(labo.semi.Ev) - 0.2
+        y_max = np.max(labo.semi.Ecv) + 0.2
+
+        fig.update_layout(
+            template="plotly_dark", # Cambiado para que se acople a tu fondo oscuro nativo
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            xaxis_title="Posición x [cm]", 
+            yaxis_title="Energía [eV]",
+            margin=dict(l=10, r=10, t=10, b=10), 
+            height=420, 
+            hovermode="x unified",
+            yaxis=dict(range=[y_min, y_max]) # Límites estables para energía lineal
+        )
+        
         st.plotly_chart(fig, use_container_width=True)
+
 
 def mostrar_tab_corrientes(labo):
     """Renderiza el perfil de corrientes de transporte a lo largo del elemento."""

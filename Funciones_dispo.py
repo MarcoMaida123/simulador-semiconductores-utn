@@ -1,6 +1,7 @@
 import numpy as np
 from constantes import *
 
+# Clase Semiconductor
 class Semiconductor():
     
     # Parametros del semiconductor
