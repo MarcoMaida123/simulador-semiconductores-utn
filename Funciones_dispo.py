@@ -113,21 +113,19 @@ class Semiconductor():
             self.po_eq = self.ni
 
     def calcBandas(self, T, E):
-        # Creo grillas para guardar los datos de las bandas de energía
-        self.Ecv   = np.zeros((len(self.x), len(self.t)))
-        self.Eiv   = np.zeros((len(self.x), len(self.t)))
-        self.Efn_i = np.zeros((len(self.x), len(self.t)))
-        self.Efp_i = np.zeros((len(self.x), len(self.t)))
-        self.Ev    = np.zeros((len(self.x), len(self.t)))
 
-# Calculo las expresiones para cada t y x
-        for n in range(len(self.t)):
-            for i in range(len(self.x)):
-                self.Ecv[i, n] = self.Egap - E * self.x[i]
-                self.Eiv[i, n] = self.Egap/2 - (K_B*T/2)*np.log(self.Nc/self.Nv) - E * self.x[i]
-                self.Efn_i[i, n] = K_B*T*np.log(self.no[i, n]/self.ni) + self.Eiv[i, n]
-                self.Efp_i[i, n] = - K_B*T*np.log(self.po[i, n]/self.ni) + self.Eiv[i, n]
-                self.Ev[i, n] = - E * self.x[i]  # <-- Corregido con self e índices
+        # 1. Expandimos el campo eléctrico a una matriz de (Nx, Nt)
+        E_xt = np.full((len(self.x), len(self.t)), E)
+        
+        # 2. Convertimos self.x en columna (Nx, 1) y la repetimos horizontalmente Nt veces
+        # np.tile toma el vector columna y lo replica (1 vez vertical, len(self.t) veces horizontal)
+        X_grid = np.tile(self.x[:, None], (1, len(self.t)))
+
+        self.Ecv = self.Egap - E_xt * X_grid
+        self.Eiv = self.Egap/2 - (K_B*T/2)*np.log(self.Nc/self.Nv) - E_xt * X_grid
+        self.Efn_i = K_B*T*np.log(self.no/self.ni) + self.Eiv
+        self.Efp_i = - K_B*T*np.log(self.po/self.ni) + self.Eiv
+        self.Ev = - E_xt * X_grid
 
     def calcSigma(self):
 
