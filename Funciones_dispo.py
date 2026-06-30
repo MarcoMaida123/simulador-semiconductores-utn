@@ -170,11 +170,7 @@ class Semiconductor():
     def calcConcentraciones(self, transitorio, dpn0, gl, E):
         # Vector de concentraciones (armo grilla de espacio-tiempo)
         dp = np.zeros((len(self.x), len(self.t)))
-
-
-        # =====================================================================
-        # Establecer condiciones de contorno automáticas según la física
-        # =====================================================================
+        
         # 1. Condición Inicial Pura (t=0)
         if transitorio == Transitorios.ENCENDIDO_LUZ:
             dp[:, 0] = 0        # Toda la barra arranca a oscuras

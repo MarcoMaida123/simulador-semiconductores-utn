@@ -200,7 +200,7 @@ def mostrar_tab_portadores(labo):
                             method="animate",
                             args=[[None], dict(frame=dict(duration=0, redraw=False), mode="immediate", transition=dict(duration=0))])
                     ],
-                    direction="right",  # <-- CAMBIADO DE "horizontal" A "right" CORREGIDO
+                    direction="right",
                     pad={"r": 10, "t": 10},
                     showactive=False,
                     x=0.0, y=-0.25, 
@@ -209,7 +209,7 @@ def mostrar_tab_portadores(labo):
             ]
         )
 
-        #CONGELAMOS EL EJE Y: Evita que la escala rebote de forma loca al animar
+
         y_min = min(labo.semi.po_eq, labo.semi.no_eq) * 0.1
         y_max = max(np.max(labo.semi.no), np.max(labo.semi.po)) * 10
 
@@ -324,7 +324,6 @@ def mostrar_tab_bandas(labo):
         
         st.plotly_chart(fig, use_container_width=True)
 
-
 def mostrar_tab_corrientes(labo):
     """Renderiza el perfil de corrientes de transporte a lo largo del elemento."""
     st.subheader("Distribución Espacial de Corrientes de Drift")
@@ -367,12 +366,13 @@ def mostrar_tab_corrientes(labo):
         st.plotly_chart(fig, use_container_width=True)
 
 def renderizar_pestaña_autor():
-    """Imprime el bloque institucional fijo de firma del alumno desarrollador."""
-    st.header("Acerca del Desarrollador")
+    """Imprime el bloque institucional de firma del alumno y la sección de feedback."""
+    st.header("👨‍💻 Acerca del Desarrollador")
     st.write("Este simulador fue desarrollado con fines pedagógicos para la comunidad de ingeniería.")
+    
     st.markdown(
         """
-        <div style='background-color: #1e2430; padding: 20px; border-radius: 10px; border-left: 5px solid #388e3c;'>
+        <div style='background-color: #1e2430; padding: 20px; border-radius: 10px; border-left: 5px solid #388e3c; margin-bottom: 25px;'>
             <h3 style='margin-top: 0; color: #ffffff;'>Mis Datos</h3>
             <p style='margin: 6px 0; font-size: 16px;'><strong style='color: #a3b8cc;'>Nombre y Apellido:</strong> Marco Maida</p>
             <p style='margin: 6px 0; font-size: 16px;'><strong style='color: #a3b8cc;'>Carrera:</strong> Ingeniería Electrónica</p>
@@ -382,6 +382,22 @@ def renderizar_pestaña_autor():
         """,
         unsafe_allow_html=True
     )
+
+    st.subheader("📢 ¡Tu opinión ayuda a mejorar el Laboratorio!")
+    st.write(
+        "Si sos estudiante o docente y estuviste usando la plataforma para resolver o validar las guías de ejercicios, "
+        "te invito a dejar tus comentarios técnicos, sugerencias o reportes de bugs. Tu feedback es fundamental "
+        "para la fase de expansión del software."
+    )
+
+    col_btn, _ = st.columns([1, 2])
+    with col_btn:
+        st.link_button(
+            "📝 Enviar Comentarios y Opiniones", 
+            url="https://docs.google.com/forms/d/e/1FAIpQLSdAnR57XJxcb708WBTdqqnVKsS6pxHUAHzAf8tLrLpzKSsOhg/viewform?usp=publish-editor", 
+            use_container_width=True,
+            type="primary" 
+        )
 
 # =============================================================================
 # FLUJO PRINCIPAL DE EJECUCIÓN (ORQUESTADOR)
